@@ -14,6 +14,9 @@ import openfl.Assets;
 
 class GameScene extends Scene
 {
+    public static inline var GAME_WIDTH = 640;
+    public static inline var GAME_HEIGHT = 360;
+
     override public function begin() {
         var level = new Level("level");
         add(level);
@@ -24,5 +27,11 @@ class GameScene extends Scene
 
     override public function update() {
         super.update();
+    }
+
+    public function onDeath() {
+        HXP.alarm(1, function() {
+            HXP.scene = new GameScene();
+        });
     }
 }

@@ -26,6 +26,11 @@ class Main extends Engine
         Key.define("down", [Key.S, Key.DOWN]);
         Key.define("left", [Key.A, Key.LEFT]);
         Key.define("right", [Key.D, Key.RIGHT]);
+        Key.define("shoot_any", [Key.I, Key.K, Key.J, Key.L]);
+        Key.define("shoot_up", [Key.I]);
+        Key.define("shoot_down", [Key.K]);
+        Key.define("shoot_left", [Key.J]);
+        Key.define("shoot_right", [Key.L]);
 
         if(Gamepad.gamepad(0) != null) {
             defineGamepadInputs(Gamepad.gamepad(0));
