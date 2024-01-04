@@ -15,8 +15,7 @@ class Player extends MiniEntity
     public static inline var SPEED = 200;
     public static inline var SHOT_COOLDOWN = 0.1;
     public static inline var SHOT_SPEED = 400;
-    public static inline var SHOT_WIDTH = 6;
-    public static inline var SHOT_HEIGHT = 12;
+    public static inline var SHOT_SIZE = 8;
 
     public static var sfx:Map<String, Sfx> = null;
 
@@ -25,7 +24,7 @@ class Player extends MiniEntity
     private var velocity:Vector2;
     private var canMove:Bool;
     private var shotCooldown:Alarm;
-    private var smallHitbox:Hitbox;
+    //private var smallHitbox:Hitbox;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -36,8 +35,9 @@ class Player extends MiniEntity
         sprite.add("idle", [0]);
         sprite.play("idle");
         var hitbox = new Hitbox(10, 10);
-        smallHitbox = new Hitbox(2, 2, 4, 4);
-        mask = new Masklist([hitbox, smallHitbox]);
+        //smallHitbox = new Hitbox(2, 2, 4, 4);
+        //mask = new Masklist([hitbox, smallHitbox]);
+        mask = hitbox;
         graphic = sprite;
         velocity = new Vector2();
         isDead = false;
@@ -74,25 +74,28 @@ class Player extends MiniEntity
     private function shooting() {
         if(Input.check("shoot_any") && !shotCooldown.active) {
             var spreadAmount = Math.PI / 16;
-            var angle:Float = 0; // up by default
-            var shotSize = [SHOT_WIDTH, SHOT_HEIGHT];
-            if(Input.check("shoot_down")) {
-                angle = Math.PI;
+            var shotHeading = new Vector2();
+            if(Input.check("shoot_up")) {
+                shotHeading.y = -1;
             }
-            else if(Input.check("shoot_left")) {
-                angle = Math.PI / 2 * 3;
-                shotSize = [SHOT_HEIGHT, SHOT_WIDTH];
+            else if(Input.check("shoot_down")) {
+                shotHeading.y = 1;
+            }
+            if(Input.check("shoot_left")) {
+                shotHeading.x = -1;
             }
             else if(Input.check("shoot_right")) {
-                angle = Math.PI / 2;
-                shotSize = [SHOT_HEIGHT, SHOT_WIDTH];
+                shotHeading.x = 1;
             }
+            var influence = velocity.clone();
+            influence.normalize(0.3);
+            shotHeading.add(influence);
             var bullet = new Bullet(
                 centerX, centerY,
                 {
-                    width: shotSize[0],
-                    height: shotSize[1],
-                    angle: angle,
+                    width: SHOT_SIZE,
+                    height: SHOT_SIZE,
+                    angle: Math.atan2(shotHeading.y, shotHeading.x) + Math.PI / 2,
                     speed: SHOT_SPEED,
                     shotByPlayer: true,
                     collidesWithWalls: true
@@ -112,11 +115,11 @@ class Player extends MiniEntity
     }
 
     private function collisions() {
-        var fatal = collideMultiple(["hazard", "boss"], x, y);
+        var fatal = collideMultiple(["enemy"], x, y);
         if(fatal != null) {
-            if(smallHitbox.collide(fatal.mask)) {
+            //if(smallHitbox.collide(fatal.mask)) {
                 die();
-            }
+            //}
         }
     }
 

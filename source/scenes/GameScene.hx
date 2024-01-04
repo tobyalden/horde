@@ -17,12 +17,25 @@ class GameScene extends Scene
     public static inline var GAME_WIDTH = 640;
     public static inline var GAME_HEIGHT = 360;
 
+    private var enemySpawner:Alarm;
+
     override public function begin() {
         var level = new Level("level");
         add(level);
         for(entity in level.entities) {
             add(entity);
         }
+        enemySpawner = new Alarm(0.2, function() {
+            for(i in 0...Random.randInt(3)) {
+                var mob = new Mob(320, 320);
+                mob.moveBy(-mob.halfWidth, -mob.halfHeight);
+                var displacer = new Vector2(320, 320);
+                displacer.rotate(Math.random() * Math.PI * 2);
+                mob.moveBy(displacer.x, displacer.y);
+                add(mob);
+            }
+        }, TweenType.Looping);
+        addTween(enemySpawner, true);
     }
 
     override public function update() {

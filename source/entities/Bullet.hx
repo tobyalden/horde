@@ -82,6 +82,7 @@ class Bullet extends MiniEntity
 
     private function onCollision() {
         scene.remove(this);
+        explode(2, 0.5, 0.33, 0.3);
     }
 
     override public function update() {
@@ -95,8 +96,8 @@ class Bullet extends MiniEntity
         if(bulletOptions.shotByPlayer) {
             var enemy = collide("enemy", x, y);
             if(enemy != null) {
-                //cast(enemy, Enemy).takeHit();
-                scene.remove(this);
+                cast(enemy, Mob).takeHit();
+                onCollision();
             }
         }
         if(!collideRect(

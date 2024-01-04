@@ -66,8 +66,7 @@ class MiniEntity extends Entity
         );
     }
 
-    private function explode() {
-        var numExplosions = 50;
+    private function explode(numExplosions:Int = 50, scale:Float = 1, fadeTime:Float = 1, velocity:Float = 0.8) {
         var directions = new Array<Vector2>();
         for(i in 0...numExplosions) {
             var angle = (2 / numExplosions) * i;
@@ -78,22 +77,21 @@ class MiniEntity extends Entity
         }
         var count = 0;
         for(direction in directions) {
-            direction.scale(0.8 * Math.random());
+            direction.scale(velocity * Math.random());
             direction.normalize(
                 Math.max(0.1 + 0.2 * Math.random(), direction.length)
             );
             var explosion = new Particle(
-                centerX, centerY, directions[count], 1, 1
+                centerX, centerY, directions[count], fadeTime, scale
             );
             explosion.layer = -99;
             scene.add(explosion);
             count++;
         }
-
 #if desktop
-        Sys.sleep(0.02);
+        //Sys.sleep(0.02);
 #end
-        scene.camera.shake(1, 4);
+        //scene.camera.shake(1, 4);
     }
 }
 
