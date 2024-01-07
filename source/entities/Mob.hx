@@ -55,7 +55,7 @@ class Mob extends MiniEntity
         }
     }
 
-    private function die() {
+    public function die() {
         HXP.scene.remove(this);
         explode(4, 0.75, 0.66, 0.6);
     }

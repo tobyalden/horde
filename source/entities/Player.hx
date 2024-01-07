@@ -57,6 +57,12 @@ class Player extends MiniEntity
     }
 
     override public function update() {
+        //if(collide("bomb", x, y) != null) {
+            //sprite.alpha = 1;
+        //}
+        //else {
+            //sprite.alpha = 0.3;
+        //}
         if(!isDead) {
             if(canMove) {
                 shooting();

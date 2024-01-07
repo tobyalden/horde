@@ -18,6 +18,7 @@ class GameScene extends Scene
     public static inline var GAME_HEIGHT = 360;
 
     private var enemySpawner:Alarm;
+    private var bombSpawner:Alarm;
 
     override public function begin() {
         var level = new Level("level");
@@ -36,6 +37,11 @@ class GameScene extends Scene
             }
         }, TweenType.Looping);
         addTween(enemySpawner, true);
+        bombSpawner = new Alarm(2.5, function() {
+            var bomb = new Bomb(GAME_WIDTH * Random.random, GAME_HEIGHT * Random.random, 40 + Random.randInt(40));
+            add(bomb);
+        }, TweenType.Looping);
+        addTween(bombSpawner, true);
     }
 
     override public function update() {
